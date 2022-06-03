@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 13:01:07 by vloth             #+#    #+#             */
-/*   Updated: 2022/05/28 03:32:06 by vloth            ###   ########.fr       */
+/*   Updated: 2022/06/03 11:01:30 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,18 @@
 /* Maillon de la liste*/
 typedef struct t_philo
 {
+	int all;
 	int	number;
 	pthread_t philo;
 	pthread_mutex_t fork;
+	pthread_mutex_t endphilo;
+	pthread_mutex_t sleep;
+	pthread_mutex_t think;
+	int	go_think;
+	long int last_meal;
 	int	left_fork;
+	int	end;
+	int	go_sleep;
 	long int timestart;
 	int		time2die;
 	int		time2sleep;
@@ -59,5 +67,9 @@ void	init_mutex(t_table *element);
 void	destroy_mutex(t_table *element);
 void	philo_eat(t_philo *element);
 void	take_fork(t_philo *element);
+int		exit_thread(t_philo *element);
+void	program_end(t_philo *element);
+void 	is_sleeping(t_philo *element);
+void	is_thinking(t_philo *element);
 
 #endif

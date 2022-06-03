@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 06:23:21 by vloth             #+#    #+#             */
-/*   Updated: 2022/05/28 04:09:14 by vloth            ###   ########.fr       */
+/*   Updated: 2022/06/03 11:16:55 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,15 @@ void	push_back_list(t_table *l, int x, char **av)
 	if (!element)
 		return ;
 	element->number = x;
+	element->all = ft_atoi(av[1]);
 	element->time2die = ft_atoi(av[2]);
 	element->time2eat = ft_atoi(av[3]);
 	element->time2sleep = ft_atoi(av[4]);
 	element->timestart = gettime();
+	element->last_meal = element->timestart;
 	element->left_fork = 1;
+	element->end = 0;
+	element->go_sleep = 0;
 	element->next = NULL;
 	element->back = NULL;
 	if (l->length == 0)
@@ -73,16 +77,12 @@ void *routine(void *arg)
 
 	timenow = gettime();
 	timenow = timenow - tmp->timestart;
-	//printf("%ld %d taken a fork\n", timenow, tmp->number);
-	//take_fork(tmp);
-	while (rip_philo(tmp) != 1)
+	while (exit_thread(tmp) != 1)
 	{
+		program_end(tmp);
 		take_fork(tmp);
-	}
-	if (rip_philo(tmp) == 1)
-	{
-		timenow = gettime() - tmp->timestart;
-		printf("%ld %d died\n", timenow, tmp->number);
+		is_sleeping(tmp);
+		is_thinking(tmp);
 	}
 	return 0;
 }		
@@ -110,3 +110,4 @@ void init_thread(t_table *table)
 	}
 	return ;
 }
+
