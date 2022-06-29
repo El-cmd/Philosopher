@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 00:36:35 by vloth             #+#    #+#             */
-/*   Updated: 2022/06/03 11:14:46 by vloth            ###   ########.fr       */
+/*   Updated: 2022/06/03 13:20:39 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	rip_philo(t_philo *element)
 {
 	long int start;
 	start = gettime();
-	if ((start - element->last_meal) > element->time2die)
+	if ((start - element->last_meal) >= element->time2die)
 		return 1;
 	return(0);
 }

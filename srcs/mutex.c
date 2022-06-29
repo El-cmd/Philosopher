@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 18:29:03 by vloth             #+#    #+#             */
-/*   Updated: 2022/06/03 10:55:00 by vloth            ###   ########.fr       */
+/*   Updated: 2022/06/04 18:11:14 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ void	is_thinking(t_philo *element)
 	{
 		printf("%ld %d is thinking\n", gettime() - element->timestart, element->number);
 		usleep(((element->time2die - (element->time2sleep + element->time2eat)) / 2) * 1000);
-		element->go_sleep = 0;
+		element->go_think = 0;
 	}
 	pthread_mutex_unlock(&element->think);
 }
-
