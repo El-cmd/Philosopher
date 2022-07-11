@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 13:00:52 by vloth             #+#    #+#             */
-/*   Updated: 2022/05/30 11:33:52 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/11 16:27:50 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 int main(int ac, char **av)
 {
 	t_table *philos;
-
+	
+	if (ac == 0)
+		return 0;
 	philos = new_dlist();
 	init_lst(philos, av);
 	init_mutex(philos);
