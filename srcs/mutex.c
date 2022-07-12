@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 18:29:03 by vloth             #+#    #+#             */
-/*   Updated: 2022/06/04 18:11:14 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/11 18:46:03 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	is_sleeping(t_philo *element)
 {
+	exit_thread(element);
+	program_end(element);
 	pthread_mutex_lock(&element->think);
 	pthread_mutex_lock(&element->sleep);
 	if (element->go_sleep == 1 && exit_thread(element) != 1)
@@ -29,6 +31,8 @@ void	is_sleeping(t_philo *element)
 
 void	is_thinking(t_philo *element)
 {
+	exit_thread(element);
+	program_end(element);
 	pthread_mutex_lock(&element->think);
 	if (element->go_think == 1 && exit_thread(element) != 1)
 	{

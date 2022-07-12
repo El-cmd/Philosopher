@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 00:36:35 by vloth             #+#    #+#             */
-/*   Updated: 2022/06/03 13:20:39 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/11 19:20:58 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	program_end(t_philo *element)
 	{
 		element->end = 1;
 		printf("%ld %d died\n", (gettime() - element->timestart), element->number);
+		pthread_mutex_unlock(&element->endphilo);
+		exit(1);
 	}
 	pthread_mutex_unlock(&element->endphilo);
 }
@@ -97,6 +99,8 @@ void	destroy_mutex(t_table *element)
 
 void	take_fork(t_philo *element)
 {
+	exit_thread(element);
+	program_end(element);
 	pthread_mutex_lock(&element->sleep);
 	pthread_mutex_lock(&element->fork);
 	pthread_mutex_lock(&element->back->fork);
@@ -115,6 +119,8 @@ void	take_fork(t_philo *element)
 
 void	philo_eat(t_philo *element)
 {
+	exit_thread(element);
+	program_end(element);
 	if (element->left_fork == 0 && element->back->left_fork == 0 && exit_thread(element) != 1)
 	{
 		printf("%ld %d is eating\n", gettime() - element->timestart, element->number);
