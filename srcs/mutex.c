@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 18:29:03 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/11 18:46:03 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/13 15:22:18 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,15 @@ void	is_thinking(t_philo *element)
 		element->go_think = 0;
 	}
 	pthread_mutex_unlock(&element->think);
+}
+
+void	one_philo(t_philo *element)
+{
+	if (element->all == 1)
+	{
+		printf("%ld %d has taken a fork\n", gettime() - element->timestart, element->number);
+		usleep(element->time2die * 1000);
+		printf("%ld %d died\n", (gettime() - element->timestart), element->number);
+		exit(1);
+	}
 }

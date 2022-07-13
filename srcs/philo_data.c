@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 06:23:21 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/11 18:09:24 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/13 14:49:56 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,11 @@ void *routine(void *arg)
 
 	timenow = gettime();
 	timenow = timenow - tmp->timestart;
+	if (tmp->all == 1)
+	{
+		one_philo(tmp);
+		return 0;
+	}
 	while (exit_thread(tmp) != 1)
 	{
 		program_end(tmp);

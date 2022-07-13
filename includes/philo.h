@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 13:01:07 by vloth             #+#    #+#             */
-/*   Updated: 2022/06/03 11:01:30 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/13 14:49:31 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,6 @@ int		exit_thread(t_philo *element);
 void	program_end(t_philo *element);
 void 	is_sleeping(t_philo *element);
 void	is_thinking(t_philo *element);
+void	one_philo(t_philo *element);
 
 #endif
