@@ -7,7 +7,8 @@ SRCS = philo.c\
        srcs/mutex.c\
 	   srcs/philo_data.c\
 	   srcs/time.c\
-	   srcs/utils.c
+	   srcs/utils.c\
+	   srcs/error_gestion.c
 
 OBJS := $(SRCS:.c=.o)
 

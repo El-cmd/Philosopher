@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 00:36:35 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/13 14:48:19 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/17 15:48:41 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,8 @@ void	philo_eat(t_philo *element)
 		element->left_fork++;
 		element->back->left_fork++;
 		usleep(element->time2eat * 1000);
+		if (element->n_each_time > 0)
+			element->n_each_time = element->n_each_time - 1;
 		element->go_sleep = 1;
 	}
 }

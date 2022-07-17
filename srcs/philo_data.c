@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 06:23:21 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/13 14:49:56 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/17 15:35:02 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ void	push_back_list(t_table *l, int x, char **av)
 	element->time2die = ft_atoi(av[2]);
 	element->time2eat = ft_atoi(av[3]);
 	element->time2sleep = ft_atoi(av[4]);
+	if (av[5] && ft_atoi(av[5]) > 0)
+		element->n_each_time = ft_atoi(av[5]);
+	else
+		element->n_each_time = -1;
 	element->timestart = gettime();
 	element->last_meal = element->timestart;
 	element->left_fork = 1;

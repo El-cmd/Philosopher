@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 13:01:07 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/13 14:49:31 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/17 15:15:10 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <pthread.h>
 # include <sys/time.h>
+#include <limits.h>
 
 /* Maillon de la liste*/
 typedef struct t_philo
@@ -28,6 +29,7 @@ typedef struct t_philo
 	pthread_mutex_t endphilo;
 	pthread_mutex_t sleep;
 	pthread_mutex_t think;
+	int	n_each_time;
 	int	go_think;
 	long int last_meal;
 	int	left_fork;
@@ -72,5 +74,6 @@ void	program_end(t_philo *element);
 void 	is_sleeping(t_philo *element);
 void	is_thinking(t_philo *element);
 void	one_philo(t_philo *element);
+int		error_gestion(char **av, int ac);
 
 #endif
