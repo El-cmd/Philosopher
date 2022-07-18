@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 18:29:03 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/17 15:53:37 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/18 11:31:24 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,4 @@ void	one_philo(t_philo *element)
 	}
 }
 
-int	each_time_
+//int	each_time_

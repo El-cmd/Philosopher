@@ -6,13 +6,13 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 06:23:21 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/17 15:35:02 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/18 14:32:57 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-void	push_back_list(t_table *l, int x, char **av)
+void	push_back_list(t_table *l, int x, char **av, int ac)
 {
 	t_philo	*element;
 
@@ -24,10 +24,13 @@ void	push_back_list(t_table *l, int x, char **av)
 	element->time2die = ft_atoi(av[2]);
 	element->time2eat = ft_atoi(av[3]);
 	element->time2sleep = ft_atoi(av[4]);
-	if (av[5] && ft_atoi(av[5]) > 0)
+	element->compteur = -1;
+	element->n_each_time = -2;
+	if (ac == 6 && ft_atoi(av[5]) > 0)
+	{
 		element->n_each_time = ft_atoi(av[5]);
-	else
-		element->n_each_time = -1;
+		element->compteur = 0;
+	}
 	element->timestart = gettime();
 	element->last_meal = element->timestart;
 	element->left_fork = 1;
@@ -60,13 +63,13 @@ t_table	*new_dlist(void)
 	return (l);
 }
 
-void	init_lst(t_table *arg, char **av)
+void	init_lst(t_table *arg, char **av, int ac)
 {
 	int i = 0;
 	int	nb = 1;
 	while (i < ft_atoi(av[1]))
 	{
-		push_back_list(arg, nb, av);
+		push_back_list(arg, nb, av, ac);
 		nb++;
 		i++;
 	}
@@ -86,7 +89,7 @@ void *routine(void *arg)
 		one_philo(tmp);
 		return 0;
 	}
-	while (exit_thread(tmp) != 1)
+	while (exit_thread(tmp) != 1 || exit_thread(tmp) != 2)
 	{
 		program_end(tmp);
 		take_fork(tmp);

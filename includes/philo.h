@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 13:01:07 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/17 15:15:10 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/18 13:48:43 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <unistd.h>
 # include <pthread.h>
 # include <sys/time.h>
-#include <limits.h>
+# include <limits.h>
 
 /* Maillon de la liste*/
 typedef struct t_philo
@@ -29,7 +29,9 @@ typedef struct t_philo
 	pthread_mutex_t endphilo;
 	pthread_mutex_t sleep;
 	pthread_mutex_t think;
+	pthread_mutex_t n_time;
 	int	n_each_time;
+	int compteur;
 	int	go_think;
 	long int last_meal;
 	int	left_fork;
@@ -58,9 +60,9 @@ int		ft_atoi(const char *nptr);
 size_t	ft_strlen(const char *s);
 
 /* Init */
-void	push_back_list(t_table *l, int x, char **av);
+void	push_back_list(t_table *l, int x, char **av, int ac);
 t_table	*new_dlist(void);
-void	init_lst(t_table *arg, char **av);
+void	init_lst(t_table *arg, char **av, int ac);
 void	init_thread(t_table *table);
 void	*routine(void *);
 long int gettime(void);
@@ -75,5 +77,6 @@ void 	is_sleeping(t_philo *element);
 void	is_thinking(t_philo *element);
 void	one_philo(t_philo *element);
 int		error_gestion(char **av, int ac);
+int		each_time(t_philo *element);
 
 #endif

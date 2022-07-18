@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 00:36:35 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/17 15:48:41 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/18 14:30:08 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	rip_philo(t_philo *element)
 
 void	program_end(t_philo *element)
 {
+	if (exit_thread(element) == 2)
+		exit(1);
 	pthread_mutex_lock(&element->endphilo);
 	if (rip_philo(element))
 	{
@@ -37,8 +39,9 @@ void	program_end(t_philo *element)
 int	exit_thread(t_philo *element)
 {
 	int i = 0;
-
-	while (i < element->all)
+	if (each_time(element) == 1)
+		return 2;
+	while (i <= element->all)
 	{
 		pthread_mutex_lock(&element->endphilo);
 		if (element->end == 1)
@@ -70,6 +73,8 @@ void	init_mutex(t_table *element)
 			return ;
 		if (pthread_mutex_init(&tmp->think, NULL) != 0)
 			return ;
+		if (pthread_mutex_init(&tmp->n_time, NULL) != 0)
+			return ;
 		tmp = tmp->next;
 		i++;
 	}
@@ -92,6 +97,8 @@ void	destroy_mutex(t_table *element)
 			return ;
 		if (pthread_mutex_destroy(&tmp->sleep) != 0)
 			return ;
+		if (pthread_mutex_destroy(&tmp->n_time) != 0)
+			return ;
 		tmp = tmp->next;
 		i++;
 	}
@@ -99,12 +106,12 @@ void	destroy_mutex(t_table *element)
 
 void	take_fork(t_philo *element)
 {
-	exit_thread(element);
-	program_end(element);
 	pthread_mutex_lock(&element->sleep);
 	pthread_mutex_lock(&element->fork);
 	pthread_mutex_lock(&element->back->fork);
-	if (element->left_fork == 1 && element->back->left_fork == 1 && exit_thread(element) != 1)
+	if (exit_thread(element) == 1)
+		program_end(element);
+	if (element->left_fork == 1 && element->back->left_fork == 1)
 	{
 		element->left_fork--;
 		element->back->left_fork--;
@@ -119,17 +126,19 @@ void	take_fork(t_philo *element)
 
 void	philo_eat(t_philo *element)
 {
-	exit_thread(element);
-	program_end(element);
-	if (element->left_fork == 0 && element->back->left_fork == 0 && exit_thread(element) != 1)
+	if (exit_thread(element) == 1)
+		program_end(element);
+	if (element->left_fork == 0 && element->back->left_fork == 0)
 	{
 		printf("%ld %d is eating\n", gettime() - element->timestart, element->number);
 		element->last_meal = gettime();
 		element->left_fork++;
 		element->back->left_fork++;
+		pthread_mutex_lock(&element->n_time);
+		if (element->n_each_time != -2)
+			element->compteur ++;
+		pthread_mutex_unlock(&element->n_time);
 		usleep(element->time2eat * 1000);
-		if (element->n_each_time > 0)
-			element->n_each_time = element->n_each_time - 1;
 		element->go_sleep = 1;
 	}
 }

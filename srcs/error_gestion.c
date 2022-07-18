@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 15:44:09 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/16 18:25:40 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/18 14:36:07 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,26 @@ int	error_gestion(char **av, int ac)
 	if (check_arg(av, ac) == 0 || check_overflow(av, ac) == 0)
 		return 0;
 	return 1;
+}
+
+int	each_time(t_philo *element)
+{
+	int i;
+	int n;
+
+	i = 0;
+	n = 0;
+	while (i < element->all)
+	{
+		pthread_mutex_lock(&element->n_time);
+		if (element->compteur >= element->n_each_time && element->compteur > 0\
+			&& element->n_each_time > 0)
+			n++;
+		pthread_mutex_unlock(&element->n_time);
+		i++;
+		element = element->next;
+	}
+	if (n == i)
+		return 1;
+	return 0;
 }
