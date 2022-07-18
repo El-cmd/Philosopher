@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 06:23:21 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/18 14:32:57 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/18 18:38:42 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,30 @@ void *routine(void *arg)
 	return 0;
 }		
 
+//void	init_even_thread(t_table *table)
+//{
+//	t_philo *tmp;
+//	int i;
+//
+//	i = 0;
+//	tmp = table->begin;
+//	while (i < table->length)
+//	{
+//		pthread_create(&tmp->philo, NULL, &routine, (void *)tmp);
+//		tmp = tmp->next;
+//		i++;
+//	}
+//}
+//
+//void	init_odd_thread(t_table *table)
+//{
+//	t_philo *tmp;
+//	int i;
+//
+//	i = 1;
+//	tmp = table->begin->next;
+//}
+
 void init_thread(t_table *table)
 {
 	t_philo *tmp;
@@ -122,4 +146,3 @@ void init_thread(t_table *table)
 	}
 	return ;
 }
-

@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 00:36:35 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/18 14:30:08 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/18 17:39:32 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,11 @@ int	exit_thread(t_philo *element)
 void	init_mutex(t_table *element)
 {
 	t_philo *tmp;
-	tmp = element->begin;
 	int i;
 
+	tmp = element->begin;
 	i = 0;
-	while (i <= element->length)
+	while (i < element->length)
 	{
 		if (pthread_mutex_init(&tmp->endphilo, NULL) != 0)
 			return ;
@@ -87,7 +87,7 @@ void	destroy_mutex(t_table *element)
 
 	i = 0;
 	tmp = element->begin;
-	while (i <= element->length)
+	while (i < element->length)
 	{
 		if (pthread_mutex_destroy(&tmp->endphilo) != 0)
 			return ;
@@ -109,9 +109,9 @@ void	take_fork(t_philo *element)
 	pthread_mutex_lock(&element->sleep);
 	pthread_mutex_lock(&element->fork);
 	pthread_mutex_lock(&element->back->fork);
-	if (exit_thread(element) == 1)
+	if (exit_thread(element) == 1 || rip_philo(element) == 1)
 		program_end(element);
-	if (element->left_fork == 1 && element->back->left_fork == 1)
+	if (element->left_fork == 1 && element->back->left_fork == 1 && rip_philo(element) != 1)
 	{
 		element->left_fork--;
 		element->back->left_fork--;
@@ -126,7 +126,7 @@ void	take_fork(t_philo *element)
 
 void	philo_eat(t_philo *element)
 {
-	if (exit_thread(element) == 1)
+	if (exit_thread(element) == 1 || rip_philo(element) == 1)
 		program_end(element);
 	if (element->left_fork == 0 && element->back->left_fork == 0)
 	{

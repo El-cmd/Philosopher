@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 18:29:03 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/18 11:31:24 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/18 17:37:21 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 void	is_sleeping(t_philo *element)
 {
-	exit_thread(element);
-	program_end(element);
+
 	pthread_mutex_lock(&element->think);
 	pthread_mutex_lock(&element->sleep);
-	if (element->go_sleep == 1 && exit_thread(element) != 1)
+	if (element->go_sleep == 1 && exit_thread(element) != 1 && rip_philo(element) != 1)
 	{
 		printf("%ld %d is sleeping\n", gettime() - element->timestart, element->number);
 		usleep(element->time2sleep * 1000);
 		element->go_sleep = 0;
 		element->go_think = 1;
+		program_end(element);
 	}
 	pthread_mutex_unlock(&element->sleep);
 	pthread_mutex_unlock(&element->think);
