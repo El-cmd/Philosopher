@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 00:36:35 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/18 17:39:32 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/19 14:47:40 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,7 @@ void	destroy_mutex(t_table *element)
 
 void	take_fork(t_philo *element)
 {
-	pthread_mutex_lock(&element->sleep);
-	pthread_mutex_lock(&element->fork);
-	pthread_mutex_lock(&element->back->fork);
+	lock(element);
 	if (exit_thread(element) == 1 || rip_philo(element) == 1)
 		program_end(element);
 	if (element->left_fork == 1 && element->back->left_fork == 1 && rip_philo(element) != 1)
@@ -119,9 +117,7 @@ void	take_fork(t_philo *element)
 		printf("%ld %d has taken a fork\n", gettime() - element->timestart, element->number);
 		philo_eat(element);
 	}
-	pthread_mutex_unlock(&element->fork);
-	pthread_mutex_unlock(&element->back->fork);
-	pthread_mutex_unlock(&element->sleep);
+	unlock(element);
 }
 
 void	philo_eat(t_philo *element)
@@ -139,6 +135,8 @@ void	philo_eat(t_philo *element)
 			element->compteur ++;
 		pthread_mutex_unlock(&element->n_time);
 		usleep(element->time2eat * 1000);
+		pthread_mutex_lock(&element->sleep);
 		element->go_sleep = 1;
+		pthread_mutex_unlock(&element->sleep);
 	}
 }

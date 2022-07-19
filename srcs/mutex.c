@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 18:29:03 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/18 17:37:21 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/19 14:39:03 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,18 @@
 void	is_sleeping(t_philo *element)
 {
 
-	pthread_mutex_lock(&element->think);
-	pthread_mutex_lock(&element->sleep);
 	if (element->go_sleep == 1 && exit_thread(element) != 1 && rip_philo(element) != 1)
 	{
 		printf("%ld %d is sleeping\n", gettime() - element->timestart, element->number);
 		usleep(element->time2sleep * 1000);
+		pthread_mutex_lock(&element->sleep);
 		element->go_sleep = 0;
+		pthread_mutex_unlock(&element->sleep);
+		pthread_mutex_lock(&element->think);
 		element->go_think = 1;
+		pthread_mutex_unlock(&element->think);
 		program_end(element);
 	}
-	pthread_mutex_unlock(&element->sleep);
-	pthread_mutex_unlock(&element->think);
 }
 
 void	is_thinking(t_philo *element)
@@ -54,4 +54,30 @@ void	one_philo(t_philo *element)
 	}
 }
 
-//int	each_time_
+void	lock(t_philo *element)
+{
+	if (element->number % 2 == 0)
+	{
+		pthread_mutex_lock(&element->fork);
+		pthread_mutex_lock(&element->back->fork);
+	}
+	else
+	{
+		pthread_mutex_lock(&element->back->fork);
+		pthread_mutex_lock(&element->fork);
+	}
+}
+
+void	unlock(t_philo *element)
+{
+	if (element->number % 2 == 0)
+	{
+		pthread_mutex_unlock(&element->fork);
+		pthread_mutex_unlock(&element->back->fork);
+	}
+	else
+	{
+		pthread_mutex_unlock(&element->back->fork);
+		pthread_mutex_unlock(&element->fork);
+	}
+}

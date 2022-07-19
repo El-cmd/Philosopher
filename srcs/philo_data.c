@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 06:23:21 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/18 18:38:42 by vloth            ###   ########.fr       */
+/*   Updated: 2022/07/18 18:52:38 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,31 +99,22 @@ void *routine(void *arg)
 	return 0;
 }		
 
-//void	init_even_thread(t_table *table)
-//{
-//	t_philo *tmp;
-//	int i;
-//
-//	i = 0;
-//	tmp = table->begin;
-//	while (i < table->length)
-//	{
-//		pthread_create(&tmp->philo, NULL, &routine, (void *)tmp);
-//		tmp = tmp->next;
-//		i++;
-//	}
-//}
-//
-//void	init_odd_thread(t_table *table)
-//{
-//	t_philo *tmp;
-//	int i;
-//
-//	i = 1;
-//	tmp = table->begin->next;
-//}
+void	init_even_thread(t_table *table)
+{
+	t_philo *tmp;
+	int i;
 
-void init_thread(t_table *table)
+	i = 1;
+	tmp = table->begin->next;
+	while (i < table->length)
+	{
+		pthread_create(&tmp->philo, NULL, &routine, (void *)tmp);
+		tmp = tmp->next->next;
+		i += 2;
+	}
+}
+
+void	init_odd_thread(t_table *table)
 {
 	t_philo *tmp;
 	int i;
@@ -131,11 +122,21 @@ void init_thread(t_table *table)
 	i = 0;
 	tmp = table->begin;
 	while (i < table->length)
-		{
-			pthread_create(&tmp->philo, NULL, &routine, (void *)tmp);
-			tmp = tmp->next;
-			i++;
-		}
+	{
+		pthread_create(&tmp->philo, NULL, &routine, (void *)tmp);
+		tmp = tmp->next->next;
+		i += 2;
+	}
+}
+
+void init_thread(t_table *table)
+{
+	t_philo *tmp;
+	int i;
+
+	init_even_thread(table);
+	usleep(100);
+	init_odd_thread(table);
 	tmp = table->begin;
 	i = 0;
 	while (i < table->length)
