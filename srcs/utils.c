@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 23:07:23 by vloth             #+#    #+#             */
-/*   Updated: 2022/05/26 06:43:31 by vloth            ###   ########.fr       */
+/*   Updated: 2022/08/11 15:15:42 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,25 @@ size_t	ft_strlen(const char *s)
 	return (size);
 }
 
-long int gettime(void)
-{ 
-	struct timeval current_time;
-	long int	time;
-	
+long int	gettime(void)
+{
+	struct timeval	current_time;
+	long int		time;
+
 	gettimeofday(&current_time, NULL);
 	time = (current_time.tv_sec * 1000) + (current_time.tv_usec / 1000);
 	return (time);
 }
 
+void	one_philo(t_philo *element)
+{
+	if (element->all == 1)
+	{
+		pthread_mutex_lock(&element->philos->print);
+		printf("%ld %d has taken a fork\n", gettime() \
+			- element->timestart, element->number);
+		usleep(element->time2die * 1000);
+		pthread_mutex_unlock(&element->philos->print);
+		return ;
+	}
+}

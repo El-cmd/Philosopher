@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 00:36:35 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/19 14:47:40 by vloth            ###   ########.fr       */
+/*   Updated: 2022/08/11 15:59:26 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,129 +14,77 @@
 
 int	rip_philo(t_philo *element)
 {
-	long int start;
+	long int	start;
+
 	start = gettime();
 	if ((start - element->last_meal) >= element->time2die)
-		return 1;
-	return(0);
+		return (1);
+	return (0);
 }
 
 void	program_end(t_philo *element)
 {
-	if (exit_thread(element) == 2)
-		exit(1);
-	pthread_mutex_lock(&element->endphilo);
 	if (rip_philo(element))
 	{
-		element->end = 1;
-		printf("%ld %d died\n", (gettime() - element->timestart), element->number);
-		pthread_mutex_unlock(&element->endphilo);
-		exit(1);
+		element->philos->dead = 1;
+		return ;
 	}
-	pthread_mutex_unlock(&element->endphilo);
 }
 
 int	exit_thread(t_philo *element)
 {
-	int i = 0;
-	if (each_time(element) == 1)
-		return 2;
-	while (i <= element->all)
+	pthread_mutex_lock(&element->n_time);
+	pthread_mutex_lock(&element->philos->endphilo);
+	program_end(element);
+	if (element->philos->dead == 1)
 	{
-		pthread_mutex_lock(&element->endphilo);
-		if (element->end == 1)
-		{
-			pthread_mutex_unlock(&element->endphilo);
-			return 1;
-		}
-		pthread_mutex_unlock(&element->endphilo);
+		pthread_mutex_unlock(&element->philos->endphilo);
+		pthread_mutex_unlock(&element->n_time);
+		return (element->number);
+	}
+	else
+	{
+		pthread_mutex_unlock(&element->n_time);
+		pthread_mutex_unlock(&element->philos->endphilo);
+		return (0);
+	}
+}
+
+void	usleep_custom(long int time)
+{
+	long int	start;
+	long int	actual_time;
+	long int	end;
+
+	start = gettime();
+	end = start + time;
+	actual_time = gettime();
+	while (actual_time <= end)
+	{
+		actual_time = gettime();
+		usleep(10);
+	}
+}
+
+int	each_time(t_philo *element)
+{
+	int	i;
+	int	n;
+
+	i = 0;
+	n = 0;
+	while (i < element->all)
+	{
+		pthread_mutex_lock(&element->nb_eat);
+		if (element->compteur >= element->n_each_time && \
+			element->compteur > 0 \
+			&& element->n_each_time > 0)
+			n++;
+		pthread_mutex_unlock(&element->nb_eat);
 		i++;
 		element = element->next;
 	}
-	return 0;
-}
-
-void	init_mutex(t_table *element)
-{
-	t_philo *tmp;
-	int i;
-
-	tmp = element->begin;
-	i = 0;
-	while (i < element->length)
-	{
-		if (pthread_mutex_init(&tmp->endphilo, NULL) != 0)
-			return ;
-		if (pthread_mutex_init(&tmp->fork, NULL) != 0)
-			return ;
-		if (pthread_mutex_init(&tmp->sleep, NULL) != 0)
-			return ;
-		if (pthread_mutex_init(&tmp->think, NULL) != 0)
-			return ;
-		if (pthread_mutex_init(&tmp->n_time, NULL) != 0)
-			return ;
-		tmp = tmp->next;
-		i++;
-	}
-}
-
-void	destroy_mutex(t_table *element)
-{
-	t_philo *tmp;
-	int i;
-
-	i = 0;
-	tmp = element->begin;
-	while (i < element->length)
-	{
-		if (pthread_mutex_destroy(&tmp->endphilo) != 0)
-			return ;
-		if (pthread_mutex_destroy(&tmp->fork) != 0)
-			return ;
-		if (pthread_mutex_destroy(&tmp->sleep) != 0)
-			return ;
-		if (pthread_mutex_destroy(&tmp->sleep) != 0)
-			return ;
-		if (pthread_mutex_destroy(&tmp->n_time) != 0)
-			return ;
-		tmp = tmp->next;
-		i++;
-	}
-}
-
-void	take_fork(t_philo *element)
-{
-	lock(element);
-	if (exit_thread(element) == 1 || rip_philo(element) == 1)
-		program_end(element);
-	if (element->left_fork == 1 && element->back->left_fork == 1 && rip_philo(element) != 1)
-	{
-		element->left_fork--;
-		element->back->left_fork--;
-		printf("%ld %d has taken a fork\n", gettime() - element->timestart, element->number);
-		printf("%ld %d has taken a fork\n", gettime() - element->timestart, element->number);
-		philo_eat(element);
-	}
-	unlock(element);
-}
-
-void	philo_eat(t_philo *element)
-{
-	if (exit_thread(element) == 1 || rip_philo(element) == 1)
-		program_end(element);
-	if (element->left_fork == 0 && element->back->left_fork == 0)
-	{
-		printf("%ld %d is eating\n", gettime() - element->timestart, element->number);
-		element->last_meal = gettime();
-		element->left_fork++;
-		element->back->left_fork++;
-		pthread_mutex_lock(&element->n_time);
-		if (element->n_each_time != -2)
-			element->compteur ++;
-		pthread_mutex_unlock(&element->n_time);
-		usleep(element->time2eat * 1000);
-		pthread_mutex_lock(&element->sleep);
-		element->go_sleep = 1;
-		pthread_mutex_unlock(&element->sleep);
-	}
+	if (n == i)
+		return (1);
+	return (0);
 }

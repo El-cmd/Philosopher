@@ -6,7 +6,7 @@
 /*   By: vloth <vloth@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 15:44:09 by vloth             #+#    #+#             */
-/*   Updated: 2022/07/18 14:36:07 by vloth            ###   ########.fr       */
+/*   Updated: 2022/08/11 15:59:36 by vloth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	check_arg(char **av, int ac)
 
 int	check_overflow(char **av, int ac)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (i < ac)
@@ -67,28 +67,11 @@ int	check_overflow(char **av, int ac)
 int	error_gestion(char **av, int ac)
 {
 	if (check_arg(av, ac) == 0 || check_overflow(av, ac) == 0)
-		return 0;
-	return 1;
-}
-
-int	each_time(t_philo *element)
-{
-	int i;
-	int n;
-
-	i = 0;
-	n = 0;
-	while (i < element->all)
+		return (0);
+	else if (ac != 5 && ac != 6)
 	{
-		pthread_mutex_lock(&element->n_time);
-		if (element->compteur >= element->n_each_time && element->compteur > 0\
-			&& element->n_each_time > 0)
-			n++;
-		pthread_mutex_unlock(&element->n_time);
-		i++;
-		element = element->next;
+		printf("Error: a parameter is missing\n");
+		return (0);
 	}
-	if (n == i)
-		return 1;
-	return 0;
+	return (1);
 }
